@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c5b206a729f1adc4b9b664b301274517
+guid: c451534aa87e76b4e9481d62b81afdb2
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -107,7 +107,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: idleCharAnim_0
+      name: enemyDeadAnim_0
       rect:
         serializedVersion: 2
         x: 0
@@ -121,14 +121,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 07beda4dea7c52c419397cb39d9f0006
-      internalID: 473567346
+      spriteID: 082b993c5a253424698e51c80ef4a422
+      internalID: -1403473429
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: idleCharAnim_1
+      name: enemyDeadAnim_1
       rect:
         serializedVersion: 2
         x: 32
@@ -142,8 +142,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f26cde8e793c5df4b8e90e04c7d24ddb
-      internalID: -1729359009
+      spriteID: 194c6494a1136d2409c5caae2dfddcc7
+      internalID: -1262233123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemyDeadAnim_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 236d60822631e2f43afa2a3865512f8d
+      internalID: 1222107321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: enemyDeadAnim_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b493d980230dce41b86d623e7929b7f
+      internalID: -1709581461
       vertices: []
       indices: 
       edges: []
@@ -159,8 +201,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      idleCharAnim_0: 473567346
-      idleCharAnim_1: -1729359009
+      enemyDeadAnim_0: -1403473429
+      enemyDeadAnim_1: -1262233123
+      enemyDeadAnim_2: 1222107321
+      enemyDeadAnim_3: -1709581461
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
