@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1b9084b8b0f81d24b8a51163ce0773ad
+guid: add7bfc3bc3a796428dfc4507d771cad
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -107,7 +107,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: NEWTileSheet_0
+      name: TileSheetFinal_0
       rect:
         serializedVersion: 2
         x: 0
@@ -121,14 +121,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f1f2388c672f1434fb1274794b0823a0
-      internalID: -976275918
+      spriteID: eea17f9d5fe28e4418bd6e8a3ff86663
+      internalID: -706292163
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NEWTileSheet_1
+      name: TileSheetFinal_1
       rect:
         serializedVersion: 2
         x: 32
@@ -142,14 +142,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8bc3b407b3085114881bb46f8ed6a17a
-      internalID: -220510293
+      spriteID: cbfd82843fb22fb41a8bb864edb8c431
+      internalID: 1143114740
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NEWTileSheet_2
+      name: TileSheetFinal_2
       rect:
         serializedVersion: 2
         x: 64
@@ -163,14 +163,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4d27df5d461bd1b4e8b1b2acd34483c8
-      internalID: 22488555
+      spriteID: 22971679a6060eb4c8b811267ec86c69
+      internalID: -1748407413
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NEWTileSheet_3
+      name: TileSheetFinal_3
       rect:
         serializedVersion: 2
         x: 96
@@ -184,14 +184,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 892f9e2c736c8ce44b23432df858cc2d
-      internalID: -917896444
+      spriteID: 260e59205b226ec4b8d5bdc43b41df47
+      internalID: -1930510629
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NEWTileSheet_4
+      name: TileSheetFinal_4
       rect:
         serializedVersion: 2
         x: 128
@@ -205,14 +205,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 37939c5e718562a40b6d8910860f1bc6
-      internalID: 539759704
+      spriteID: 630c21e6489136f41a3a4a68bce9712e
+      internalID: -1728641412
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NEWTileSheet_5
+      name: TileSheetFinal_5
       rect:
         serializedVersion: 2
         x: 160
@@ -226,8 +226,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4eab0f3b78451214e946bfffc3d7cd90
-      internalID: -1937594263
+      spriteID: a8629454467fced4d84f48f9870e7fd2
+      internalID: 930032063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileSheetFinal_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e863f797ceaeb14b9aa67f1001526ba
+      internalID: -2104965130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TileSheetFinal_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cdac537f687af54f873abbf217330b4
+      internalID: 1560451947
       vertices: []
       indices: 
       edges: []
@@ -243,12 +285,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      NEWTileSheet_0: -976275918
-      NEWTileSheet_1: -220510293
-      NEWTileSheet_2: 22488555
-      NEWTileSheet_3: -917896444
-      NEWTileSheet_4: 539759704
-      NEWTileSheet_5: -1937594263
+      TileSheetFinal_0: -706292163
+      TileSheetFinal_1: 1143114740
+      TileSheetFinal_2: -1748407413
+      TileSheetFinal_3: -1930510629
+      TileSheetFinal_4: -1728641412
+      TileSheetFinal_5: 930032063
+      TileSheetFinal_6: -2104965130
+      TileSheetFinal_7: 1560451947
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

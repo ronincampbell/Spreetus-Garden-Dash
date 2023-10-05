@@ -41,12 +41,12 @@ public class LevelGen : MonoBehaviour
 
     void GenerateLevel()
     {
-        int rows = levelMap.GetLength(0); // rows
-        int cols = levelMap.GetLength(1); // columns
+        int rows = levelMap.GetLength(0);
+        int cols = levelMap.GetLength(1);
 
-        for (int y = 0; y < rows; y++)  // y for rows
+        for (int y = 0; y < rows; y++)
         {
-            for (int x = 0; x < cols; x++) // x for columns
+            for (int x = 0; x < cols; x++)
             {
                 GenerateTile(x, y);
             }
@@ -62,13 +62,19 @@ public class LevelGen : MonoBehaviour
         int tileType = levelMap[y, x];
         Vector2 spawnPos = new Vector2(x, y);
 
-        // Spawn required tile
+        GameObject spawnedTile = null;
+
         if (tileType == 0) {
             GameObject Empty = Instantiate(EmptyPrefab, spawnPos, Quaternion.identity);
         } else if (tileType == 1) {
             GameObject OutsideCorner = Instantiate(OutsideCornerPrefab, spawnPos, Quaternion.identity);
-        } else if (tileType == 2) {
-            GameObject OutsideWall = Instantiate(OutsideWallPrefab, spawnPos, Quaternion.identity);
+        }
+        else if (tileType == 2){
+            spawnedTile = Instantiate(OutsideWallPrefab, spawnPos, Quaternion.identity);
+            if (ShouldRotateOutsideWall(x, y))
+            {
+                spawnedTile.transform.Rotate(0, 0, 90);
+            }
         } else if (tileType == 3) {
             GameObject InsideCorner = Instantiate(InsideCornerPrefab, spawnPos, Quaternion.identity);
         } else if (tileType == 4) {
@@ -84,34 +90,42 @@ public class LevelGen : MonoBehaviour
 
     void MirrorLevel(int rows, int cols)
     {
-        // 1st Quadrant: Vertical mirroring (Top-Left)
         for (int y = 0; y < rows; y++)
         {
             for (int x = 0; x < cols; x++)
             {
                 Vector3 position = new Vector3(x * tileSize, (rows - y - 1) * tileSize + rows * tileSize, 0);
-                Instantiate(GetTilePrefab(levelMap[y, x]), position, Quaternion.identity);
+                GameObject tile = Instantiate(GetTilePrefab(levelMap[y, x]), position, Quaternion.identity);
+                ApplyRotationForMirror(tile, x, y, "1stQuadrant");
             }
         }
 
-        // 2nd Quadrant: Both horizontal and vertical mirroring (Top-Right)
         for (int y = 0; y < rows; y++)
         {
             for (int x = 0; x < cols; x++)
             {
                 Vector3 position = new Vector3((cols - x - 1) * tileSize + cols * tileSize, (rows - y - 1) * tileSize + rows * tileSize, 0);
-                Instantiate(GetTilePrefab(levelMap[y, x]), position, Quaternion.identity);
+                GameObject tile = Instantiate(GetTilePrefab(levelMap[y, x]), position, Quaternion.identity);
+                ApplyRotationForMirror(tile, x, y, "2ndQuadrant");
             }
         }
 
-        // 4th Quadrant: Horizontal mirroring (Bottom-Right)
         for (int y = 0; y < rows; y++)
         {
             for (int x = 0; x < cols; x++)
             {
                 Vector3 position = new Vector3((cols - x - 1) * tileSize + cols * tileSize, y * tileSize, 0);
-                Instantiate(GetTilePrefab(levelMap[y, x]), position, Quaternion.identity);
+                GameObject tile = Instantiate(GetTilePrefab(levelMap[y, x]), position, Quaternion.identity);
+                ApplyRotationForMirror(tile, x, y, "4thQuadrant");
             }
+        }
+    }
+
+    void ApplyRotationForMirror(GameObject tile, int x, int y, string quadrant)
+    {
+        if (levelMap[y, x] == 2 && ShouldRotateOutsideWall(x, y))
+        {
+                tile.transform.Rotate(0, 0, 90);
         }
     }
 
@@ -143,4 +157,18 @@ public class LevelGen : MonoBehaviour
         // Centering camera
         cam.transform.position = new Vector3(mapWidth / 2, (mapHeight - tileSize * 1f) / 2, -10f);
     }
+
+    bool ShouldRotateOutsideWall(int x, int y)
+    {
+        // Check for top
+        bool hasTopNeighbor = y + 1 < levelMap.GetLength(0) && (levelMap[y + 1, x] == 1 || levelMap[y + 1, x] == 2);
+
+        // Check for bottom
+        bool hasBottomNeighbor = y - 1 >= 0 && (levelMap[y - 1, x] == 1 || levelMap[y - 1, x] == 2);
+
+        // Neither
+        return !(hasTopNeighbor || hasBottomNeighbor);
+    }
+
+    
 }
