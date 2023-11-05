@@ -13,12 +13,14 @@ public class MovementController : MonoBehaviour
     private AudioSource audioSource;
     private bool isWaiting = false;
 
+    // Start is called before the first frame update
     private void Start()
     {
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
     }
 
+    // Update is called once per frame
     private void Update()
     {
         Vector3 currentTarget = targetPositions[currentTargetIndex];
