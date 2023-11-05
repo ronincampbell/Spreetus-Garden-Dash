@@ -4,20 +4,26 @@ using System.Collections;
 
 public class PacStudentController : MonoBehaviour
 {
-    private bool isWaiting;
-    private Animator animator;
+    [Header("Audio")]
     private AudioSource audioSource;
     public AudioClip pelletSFX;
+    public AudioClip wallSFX;
+    public AudioClip walkSFX;
+    [Header("Graphics")]
+    public Tilemap groundTilemap;
+    public Tile emptyGroundTile;
+    public ParticleSystem wallBump;
+    public GameObject movementParticles;
+    [Header("Game Values")]
+    public float moveSpeed = 5.0f;
+    private float moveTime;
+    private bool isWaiting;
+    private bool isLerping;
     private Vector2 lastInput;
     private Vector2 currentInput;
     private Vector3 startPosition;
-    public float moveSpeed = 5.0f;
-    public Tilemap groundTilemap;
-    public AudioClip walkSFX;
     private Vector3 endPosition;
-    private float moveTime;
-    private bool isLerping;
-
+    private Animator animator;
 
     /*
     ---- NOTE ----
@@ -54,10 +60,11 @@ public class PacStudentController : MonoBehaviour
             PlayerDirectionAnimation(currentInput);
             if (!audioSource.isPlaying && !isWaiting)
             {
-                AudioClip clipToPlay = GetClipForNextTile(endPosition);
+                AudioClip clipToPlay = GetClipToPlay(endPosition);
                 StartCoroutine(PlayMovingSoundWithDelay(clipToPlay));
             }
         }
+        CheckForPellet(transform.position);
     }
 
     private void GatherInput() // Setting each key to an direction
@@ -77,6 +84,10 @@ public class PacStudentController : MonoBehaviour
         {
             currentInput = direction;
             StartLerp(GetCellCenterWorld(nextCell));
+            if (!movementParticles.activeSelf)
+            {
+                movementParticles.SetActive(true);
+            }
         }
         else if (currentInput != Vector2.zero) // check if we can keep going
         {
@@ -84,6 +95,16 @@ public class PacStudentController : MonoBehaviour
             if (IsWalkable(nextCell))
             {
                 StartLerp(GetCellCenterWorld(nextCell));
+            }
+            else // This condition will only be called when hitting a wall
+            {
+                wallBump.transform.position = (GetCellCenterWorld(nextCell) + transform.position) / 2;
+                //Debug.Log("Called");
+                currentInput = Vector2.zero;
+                movementParticles.SetActive(false);
+                audioSource.PlayOneShot(wallSFX, 1.0f);
+                wallBump.Play();
+
             }
         }
     }
@@ -156,7 +177,19 @@ public class PacStudentController : MonoBehaviour
         isWaiting = false;
     }
 
-    private AudioClip GetClipForNextTile(Vector3 position) // check if theres a pellet or not
+    private void CheckForPellet(Vector3 position) // check if theres a pellet or not
+    {
+        Vector3Int cellPosition = groundTilemap.WorldToCell(position);
+        Tile tile = groundTilemap.GetTile<Tile>(cellPosition);
+        if (tile != null && tile.name == "TileSheetFinal_7")
+        {
+            // This removes the pellet from the tile - I know that it says to use colliders but that would need me to recreate the level and make a new prefab, this is just a more elegant solution. Plus, i used them for the other stuff :p
+            groundTilemap.SetTile(cellPosition, emptyGroundTile); 
+            // Add 10 points
+            
+        }
+    }
+    private AudioClip GetClipToPlay(Vector3 position) // get the right clip to play for the tile
     {
         Vector3Int cellPosition = groundTilemap.WorldToCell(position);
         Tile tile = groundTilemap.GetTile<Tile>(cellPosition);
@@ -169,4 +202,28 @@ public class PacStudentController : MonoBehaviour
             return walkSFX;
         }
     }
+
+
+    // logic to allow teleporting
+    public void InterruptLerpAndTeleport(Vector3 newPosition, bool isLeft)
+    {
+        isLerping = false;
+
+        if (movementParticles.activeSelf)
+        {
+            movementParticles.SetActive(false);
+        }
+
+        if (isLeft)
+        {
+            newPosition.x -= 1.5f;
+        }
+        else
+        {
+            newPosition.x += 1.5f;
+        }
+        newPosition.y = transform.position.y;
+        transform.position = newPosition;
+    }
+
 }

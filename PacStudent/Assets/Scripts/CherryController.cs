@@ -57,13 +57,13 @@ public class CherryController : MonoBehaviour
     // Move cherry to oposite side of screen
     private IEnumerator MoveCherry(GameObject cherry, Vector2 targetPosition)
     {
-        while ((Vector2)cherry.transform.position != targetPosition)
+        while ( cherry != null && (Vector2)cherry.transform.position != targetPosition)
         {
+            if (cherry == null) yield break;
             cherry.transform.position = Vector2.MoveTowards(cherry.transform.position, targetPosition, moveSpeed * Time.deltaTime);
             yield return null;
         }
-
-        Destroy(cherry);
+        if (cherry != null) Destroy(cherry);
     }
 
     private Vector2 GetOppositePosition(Vector2 originalPosition)
