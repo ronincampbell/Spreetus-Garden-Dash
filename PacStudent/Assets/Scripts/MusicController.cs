@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MusicController : MonoBehaviour
 {
-    public AudioClip initialClip;
-    public AudioClip loopingClip;
+    public AudioClip normalMusic;
+    public AudioClip hyperMusic;
 
     private AudioSource audioSource;
 
@@ -14,31 +14,20 @@ public class MusicController : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
 
-        PlayInitialClip();
+        PlayNormalMusic();
         
     }
 
-    void PlayInitialClip()
+    public void PlayNormalMusic()
     {
-        audioSource.clip = initialClip;
-        audioSource.loop = false;
+        audioSource.clip = normalMusic;
+        audioSource.loop = true;
         audioSource.Play();
-
-        audioSource.PlayScheduled(AudioSettings.dspTime + initialClip.length);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlayHyperMusic()
     {
-        if (!audioSource.isPlaying)
-        {
-            PlayLoopingClip();
-        }
-    }
-
-    void PlayLoopingClip()
-    {
-        audioSource.clip = loopingClip;
+        audioSource.clip = hyperMusic;
         audioSource.loop = true;
         audioSource.Play();
     }

@@ -9,6 +9,7 @@ public class PacStudentController : MonoBehaviour
     public AudioClip pelletSFX;
     public AudioClip wallSFX;
     public AudioClip walkSFX;
+    public AudioClip deathSFX;
     [Header("Graphics")]
     public Tilemap groundTilemap;
     public Tile emptyGroundTile;
@@ -19,8 +20,10 @@ public class PacStudentController : MonoBehaviour
     private float moveTime;
     private bool isWaiting;
     private bool isLerping;
+    public bool isDead;
     private Vector2 lastInput;
     private Vector2 currentInput;
+    private Vector3 SpawnPosition;
     private Vector3 startPosition;
     private Vector3 endPosition;
     private Animator animator;
@@ -36,11 +39,12 @@ public class PacStudentController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentInput = lastInput = Vector2.right;
+        currentInput = lastInput = Vector2.zero;
         startPosition = endPosition = transform.position;
         isLerping = isWaiting = false;
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+        SpawnPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -69,10 +73,13 @@ public class PacStudentController : MonoBehaviour
 
     private void GatherInput() // Setting each key to an direction
     {
-        if (Input.GetKeyDown(KeyCode.W)) lastInput = Vector2.up;
-        if (Input.GetKeyDown(KeyCode.A)) lastInput = Vector2.left;
-        if (Input.GetKeyDown(KeyCode.S)) lastInput = Vector2.down;
-        if (Input.GetKeyDown(KeyCode.D)) lastInput = Vector2.right;
+        if (!isDead)
+        {
+            if (Input.GetKeyDown(KeyCode.W)) lastInput = Vector2.up;
+            if (Input.GetKeyDown(KeyCode.A)) lastInput = Vector2.left;
+            if (Input.GetKeyDown(KeyCode.S)) lastInput = Vector2.down;
+            if (Input.GetKeyDown(KeyCode.D)) lastInput = Vector2.right;
+        }
     }
 
     private void TryMove(Vector2 direction)
@@ -184,9 +191,9 @@ public class PacStudentController : MonoBehaviour
         if (tile != null && tile.name == "TileSheetFinal_7")
         {
             // This removes the pellet from the tile - I know that it says to use colliders but that would need me to recreate the level and make a new prefab, this is just a more elegant solution. Plus, i used them for the other stuff :p
-            groundTilemap.SetTile(cellPosition, emptyGroundTile); 
+            groundTilemap.SetTile(cellPosition, emptyGroundTile);
             // Add 10 points
-            
+
         }
     }
     private AudioClip GetClipToPlay(Vector3 position) // get the right clip to play for the tile
@@ -224,6 +231,28 @@ public class PacStudentController : MonoBehaviour
         }
         newPosition.y = transform.position.y;
         transform.position = newPosition;
+    }
+
+    public void KillPlayer()
+    {
+        isLerping = false;
+        if (movementParticles.activeSelf)
+        {
+            movementParticles.SetActive(false);
+        }
+        isDead = true;
+        animator.Play("DeathAnim");
+        audioSource.PlayOneShot(deathSFX, 1.0f);
+        lastInput = currentInput = Vector2.zero;
+    }
+
+    public void Respawn(){
+        isDead = false;
+        currentInput = lastInput = Vector2.zero;
+        startPosition = endPosition = transform.position;
+        isLerping = isWaiting = false;
+        transform.position = SpawnPosition;
+        animator.Play("WalkLeftAnim");
     }
 
 }
