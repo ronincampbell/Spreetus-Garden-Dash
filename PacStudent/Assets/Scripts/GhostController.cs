@@ -9,10 +9,14 @@ public class GhostController : MonoBehaviour
     public bool isNormal;
     public bool isDead;
     private GameObject pacStudent;
+    private GameObject gameManager;
+    private ScoreKeeper scoreKeeper;
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.FindGameObjectWithTag("GameController");
         pacStudent = GameObject.FindGameObjectWithTag("Player");
+        scoreKeeper = gameManager.GetComponent<ScoreKeeper>();
         NormalState();
     }
 
@@ -76,6 +80,8 @@ public class GhostController : MonoBehaviour
         isRecovering = false;
 
         Debug.Log(this.gameObject.name + " is dead!");
+        scoreKeeper.AddScore(300);
+
         StartCoroutine(DeadTimer());
     }
 

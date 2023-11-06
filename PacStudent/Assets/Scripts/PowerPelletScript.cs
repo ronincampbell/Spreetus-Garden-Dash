@@ -5,11 +5,13 @@ using UnityEngine;
 public class PowerPelletScript : MonoBehaviour
 {
     public AudioSource audioSource;
+    private HUDManager hudManager;
     private MusicController musicController;
     // Start is called before the first frame update
     void Start()
     {
         musicController = audioSource.GetComponent<MusicController>();
+        hudManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<HUDManager>();
     }
 
     // Update is called once per frame
@@ -32,14 +34,18 @@ public class PowerPelletScript : MonoBehaviour
                 }
             }
 
-            // Disable the sprite renderer only once, after all ghosts have been set to scared state.
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
             if (spriteRenderer != null)
             {
                 spriteRenderer.enabled = false;
             }
 
-            // Assuming you want to play the hyperMusic when the power pellet is consumed.
+            BoxCollider2D boxCollider2D = GetComponent<BoxCollider2D>();
+            if (boxCollider2D != null)
+            {
+                boxCollider2D.enabled = false;
+            }
+
             if (musicController != null)
             {
                 musicController.PlayHyperMusic();
@@ -52,6 +58,7 @@ public class PowerPelletScript : MonoBehaviour
 
     private IEnumerator ScaredTimer()
     {
+        hudManager.StartCoroutine("HungryTimer");
         GameObject[] ghosts = GameObject.FindGameObjectsWithTag("Enemy");
         yield return new WaitForSeconds(7.0f);
         foreach (GameObject ghost in ghosts)

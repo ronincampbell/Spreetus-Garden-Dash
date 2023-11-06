@@ -16,8 +16,12 @@ public class PacStudentController : MonoBehaviour
     public ParticleSystem wallBump;
     public GameObject movementParticles;
     [Header("Game Values")]
+    public GameObject gameManager;
+    private HUDManager hudManager;
+    private ScoreKeeper scoreKeeper;
     public float moveSpeed = 5.0f;
     private float moveTime;
+    private int eatenPellets = 0;
     private bool isWaiting;
     private bool isLerping;
     public bool isDead;
@@ -45,30 +49,36 @@ public class PacStudentController : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         SpawnPosition = transform.position;
+        hudManager = gameManager.GetComponent<HUDManager>();
+        scoreKeeper = gameManager.GetComponent<ScoreKeeper>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(GetCellCenterWorld(groundTilemap.WorldToCell(transform.position)));
-        GatherInput();
-
-        if (!isLerping)
+        if (hudManager.gameStarted)
         {
-            TryMove(lastInput);
-        }
+            //Debug.Log(GetCellCenterWorld(groundTilemap.WorldToCell(transform.position)));
+            GatherInput();
 
-        if (isLerping)
-        {
-            ContinueLerp();
-            PlayerDirectionAnimation(currentInput);
-            if (!audioSource.isPlaying && !isWaiting)
+            if (!isLerping)
             {
-                AudioClip clipToPlay = GetClipToPlay(endPosition);
-                StartCoroutine(PlayMovingSoundWithDelay(clipToPlay));
+                TryMove(lastInput);
             }
+
+            if (isLerping)
+            {
+                ContinueLerp();
+                PlayerDirectionAnimation(currentInput);
+                if (!audioSource.isPlaying && !isWaiting)
+                {
+                    AudioClip clipToPlay = GetClipToPlay(endPosition);
+                    StartCoroutine(PlayMovingSoundWithDelay(clipToPlay));
+                }
+            }
+            CheckForPellet(transform.position);
         }
-        CheckForPellet(transform.position);
+
     }
 
     private void GatherInput() // Setting each key to an direction
@@ -192,8 +202,13 @@ public class PacStudentController : MonoBehaviour
         {
             // This removes the pellet from the tile - I know that it says to use colliders but that would need me to recreate the level and make a new prefab, this is just a more elegant solution. Plus, i used them for the other stuff :p
             groundTilemap.SetTile(cellPosition, emptyGroundTile);
-            // Add 10 points
 
+            scoreKeeper.AddScore(10);
+            eatenPellets++;
+
+        }
+        if (eatenPellets == 220){
+            hudManager.GameOver();
         }
     }
     private AudioClip GetClipToPlay(Vector3 position) // get the right clip to play for the tile
@@ -235,6 +250,7 @@ public class PacStudentController : MonoBehaviour
 
     public void KillPlayer()
     {
+
         isLerping = false;
         if (movementParticles.activeSelf)
         {
@@ -244,9 +260,12 @@ public class PacStudentController : MonoBehaviour
         animator.Play("DeathAnim");
         audioSource.PlayOneShot(deathSFX, 1.0f);
         lastInput = currentInput = Vector2.zero;
+        hudManager.LoseLife();
     }
 
-    public void Respawn(){
+    public void Respawn()
+    {
+        if (!hudManager.gameStarted) return;
         isDead = false;
         currentInput = lastInput = Vector2.zero;
         startPosition = endPosition = transform.position;

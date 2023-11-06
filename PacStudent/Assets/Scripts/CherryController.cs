@@ -41,6 +41,7 @@ public class CherryController : MonoBehaviour
     // Spawn a new cherry every 10 seconds after the last one has been destrtoyed
     IEnumerator SpawnCherry()
     {
+        yield return new WaitForSeconds(5.0f);
         while (true)
         {
             Vector2 spawnPosition = GetRandomPosition();
