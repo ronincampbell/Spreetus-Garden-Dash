@@ -1,6 +1,7 @@
-using UnityEngine;
-using UnityEngine.Tilemaps;
 using System.Collections;
+using UnityEngine.Tilemaps;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class PacStudentController : MonoBehaviour
 {
@@ -39,6 +40,7 @@ public class PacStudentController : MonoBehaviour
     --------------
     */
 
+    // His name is spritus
 
     // Start is called before the first frame update
     void Start()
@@ -261,6 +263,7 @@ public class PacStudentController : MonoBehaviour
         audioSource.PlayOneShot(deathSFX, 1.0f);
         lastInput = currentInput = Vector2.zero;
         hudManager.LoseLife();
+        GetComponent<Collider2D>().enabled = false;
     }
 
     public void Respawn()
@@ -272,6 +275,7 @@ public class PacStudentController : MonoBehaviour
         isLerping = isWaiting = false;
         transform.position = SpawnPosition;
         animator.Play("WalkLeftAnim");
+        GetComponent<Collider2D>().enabled = true;
     }
 
 }

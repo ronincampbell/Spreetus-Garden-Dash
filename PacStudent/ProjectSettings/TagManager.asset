@@ -7,6 +7,18 @@ TagManager:
   - Enemy
   - HUDManager
   - Lives
+  - Spawn
+  - TopLeft
+  - TopRight
+  - BottomLeft
+  - BottomRight
+  - MiddleBottomRight
+  - MiddleBottomLeft
+  - MiddleTopLeft
+  - MiddleTopRight
+  - MiddleRight
+  - Cherry
+  - PowerPellet
   layers:
   - Default
   - TransparentFX
