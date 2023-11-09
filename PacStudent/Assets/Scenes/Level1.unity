@@ -6426,7 +6426,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &459669888
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6610,6 +6610,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hud: {fileID: 1855717655}
   gameStarted: 0
+  Level2: 0
+  hungryActive: 0
+  herbActive: 0
+  laserActive: 0
+  huntingActive: 0
+  huntingWarning: {fileID: 0}
+  herbWarning: {fileID: 0}
+  laserWarning: {fileID: 0}
+  hungryWarning: {fileID: 0}
 --- !u!114 &473551293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15901,7 +15910,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1268734055
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16272,7 +16281,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 473551292}
         m_TargetAssemblyTypeName: HUDManager, Assembly-CSharp
         m_MethodName: exitButton
         m_Mode: 1
@@ -23249,7 +23258,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1808062601
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31949,7 +31958,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2051229775
 RectTransform:
   m_ObjectHideFlags: 0
@@ -35520,6 +35529,7 @@ MonoBehaviour:
   gameManager: {fileID: 473551289}
   moveSpeed: 3
   isDead: 0
+  invertControls: 0
 --- !u!50 &726887970136814913
 Rigidbody2D:
   serializedVersion: 4

@@ -26,6 +26,7 @@ public class LaserScript : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         boxCollider = gameObject.AddComponent<BoxCollider2D>();
         boxCollider.isTrigger = true;
+        boxCollider.enabled = false;
         hudManager = GameObject.FindWithTag("GameController").GetComponent<HUDManager>();
         difficultyManager = GameObject.FindWithTag("GameController").GetComponent<DifficultyManager>();
 
