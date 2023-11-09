@@ -42,6 +42,9 @@ public class GhostController : MonoBehaviour
     private GameObject middleTopRight;
     private GameObject middleTopLeft;
     private GameObject middleRight;
+    private bool isHunting;
+    private bool Level2;
+    private DifficultyManager difficultyManager;
 
 
     // Start is called before the first frame update
@@ -62,9 +65,11 @@ public class GhostController : MonoBehaviour
         pacStudent = GameObject.FindGameObjectWithTag("Player");
         scoreKeeper = gameManager.GetComponent<ScoreKeeper>();
         hudManager = gameManager.GetComponent<HUDManager>();
+        Level2 = hudManager.Level2;
         currentInput = lastInput = Vector2.right;
         startPosition = endPosition = spawnPosition = transform.position;
         isLerping = false;
+        difficultyManager = gameManager.GetComponent<DifficultyManager>();
         if (ghostID == 1 || ghostID == 4)
         {
             wayPoint = northWayPoint;
@@ -74,6 +79,9 @@ public class GhostController : MonoBehaviour
             wayPoint = southWayPoint;
         }
         NormalState();
+        if (Level2){
+            StartCoroutine(HuntTimer());
+        }
     }
 
     // Update is called once per frame
@@ -173,7 +181,7 @@ public class GhostController : MonoBehaviour
             isInSpawn = true;
             //Debug.Log("Ghost is in spawn");
         }
-        else if (other.gameObject.tag != "Enemy" ||  other.gameObject.tag != "Cherry" || other.gameObject.tag != "PowerPellet")
+        else if (other.gameObject.tag != "Enemy" || other.gameObject.tag != "Cherry" || other.gameObject.tag != "PowerPellet")
         {
             mostRecentWayPoint = other.gameObject;
         }
@@ -268,20 +276,27 @@ public class GhostController : MonoBehaviour
     {
         if (isNormal && !isInSpawn)
         {
-            switch (ghostID)
+            if (isHunting)
             {
-                case 1:
-                    Ghost1Path();
-                    break;
-                case 2:
-                    Ghost2Path();
-                    break;
-                case 3:
-                    Ghost3Path();
-                    break;
-                case 4:
-                    Ghost4Path();
-                    break;
+                HuntingPath();
+            }
+            else
+            {
+                switch (ghostID)
+                {
+                    case 1:
+                        Ghost1Path();
+                        break;
+                    case 2:
+                        Ghost2Path();
+                        break;
+                    case 3:
+                        Ghost3Path();
+                        break;
+                    case 4:
+                        Ghost4Path();
+                        break;
+                }
             }
         }
         else if (isInSpawn && !isDead)
@@ -533,6 +548,58 @@ public class GhostController : MonoBehaviour
         lastInput = direction;
     }
 
+    private void HuntingPath()
+    {
+        //Debug.Log(this.gameObject.name + " is hunting");`
+        float distanceFromPlayer = Vector3.Distance(transform.position, pacStudent.transform.position);
+
+        Vector2[] possibleDirections = new Vector2[] {
+            Vector2.up,
+            Vector2.down,
+            Vector2.left,
+            Vector2.right
+        };
+
+        List<Vector2> validDirections = new List<Vector2>(possibleDirections);
+
+        Vector2 oppositeLastInput = -lastInput;
+        validDirections.Remove(oppositeLastInput);
+
+        List<Vector2> sortedDirections = validDirections.OrderBy(dir => Vector3.Distance(transform.position + new Vector3(dir.x, dir.y, 0), pacStudent.transform.position)).ToList();
+
+        Vector2 direction = Vector2.zero;
+        bool foundPath = false;
+
+        // find the first walkable one
+        foreach (var dir in sortedDirections)
+        {
+            if (IsWalkable(groundTilemap.WorldToCell(transform.position + new Vector3(dir.x, dir.y, 0))))
+            {
+                direction = dir;
+                foundPath = true;
+                break;
+            }
+        }
+
+        // if there isnt a shortest one just pick a random one
+        if (!foundPath)
+        {
+            var walkableDirections = validDirections.Where(dir => IsWalkable(groundTilemap.WorldToCell(transform.position + new Vector3(dir.x, dir.y, 0)))).ToList();
+
+            if (walkableDirections.Count > 0)
+            {
+                direction = walkableDirections[Random.Range(0, walkableDirections.Count)];
+            }
+            else
+            {
+                Debug.Log("no walkable directions D:");
+                // this shouldn't ever happen
+            }
+        }
+
+        lastInput = direction;
+    }
+
 
     private IEnumerator DeadGhostPath()
     {
@@ -562,33 +629,52 @@ public class GhostController : MonoBehaviour
         if (mostRecentWayPoint == topLeft)
         {
             return middleTopRight;
-        } else if (mostRecentWayPoint == topRight)
+        }
+        else if (mostRecentWayPoint == topRight)
         {
             return middleRight;
-        } else if (mostRecentWayPoint == bottomLeft)
+        }
+        else if (mostRecentWayPoint == bottomLeft)
         {
             return middleTopLeft;
-        } else if (mostRecentWayPoint == bottomRight)
+        }
+        else if (mostRecentWayPoint == bottomRight)
         {
             return middleBottomRight;
-        } else if (mostRecentWayPoint == middleBottomRight)
+        }
+        else if (mostRecentWayPoint == middleBottomRight)
         {
             return middleBottomLeft;
-        } else if (mostRecentWayPoint == middleBottomLeft)
+        }
+        else if (mostRecentWayPoint == middleBottomLeft)
         {
             return bottomLeft;
-        } else if (mostRecentWayPoint == middleTopRight)
+        }
+        else if (mostRecentWayPoint == middleTopRight)
         {
             return topRight;
-        } else if (mostRecentWayPoint == middleTopLeft)
+        }
+        else if (mostRecentWayPoint == middleTopLeft)
         {
             return topLeft;
-        } else if (mostRecentWayPoint == middleRight)
+        }
+        else if (mostRecentWayPoint == middleRight)
         {
             return bottomRight;
-        } else
+        }
+        else
         {
             return middleRight;
+        }
+    }
+    private IEnumerator HuntTimer(){
+        while(true){
+            yield return new WaitForSeconds(difficultyManager.HuntingFrequency());
+            isHunting = true;
+            hudManager.huntingActive = true;
+            yield return new WaitForSeconds(10f);
+            isHunting = false;
+            hudManager.huntingActive = false;
         }
     }
 

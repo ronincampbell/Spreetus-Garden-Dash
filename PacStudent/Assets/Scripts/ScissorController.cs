@@ -8,10 +8,12 @@ public class ScissorController : MonoBehaviour
     public GameObject scissorPrefab;
     public float moveSpeed = 2f;
     private GameObject currentScissor = null;
+    private HUDManager hudManager;
 
     // Start is called before the first frame update
     void Start()
     {
+        hudManager = GameObject.FindWithTag("GameController").GetComponent<HUDManager>();
         sceneCamera = Camera.main;
         StartCoroutine(IntitalScissorCall());
     }
@@ -42,7 +44,7 @@ public class ScissorController : MonoBehaviour
     IEnumerator SpawnScissor()
     {
         yield return new WaitForSeconds(5.0f);
-        while (true)
+        while (true && hudManager.gameStarted)
         {
             Vector2 spawnPosition = GetRandomPosition();
             Vector2 targetPosition = GetOppositePosition(spawnPosition);

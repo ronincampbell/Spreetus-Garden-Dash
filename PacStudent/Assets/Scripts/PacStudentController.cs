@@ -26,6 +26,7 @@ public class PacStudentController : MonoBehaviour
     private bool isWaiting;
     private bool isLerping;
     public bool isDead;
+    public bool invertControls;
     private Vector2 lastInput;
     private Vector2 currentInput;
     private Vector3 SpawnPosition;
@@ -85,12 +86,17 @@ public class PacStudentController : MonoBehaviour
 
     private void GatherInput() // Setting each key to an direction
     {
-        if (!isDead)
+        if (!isDead && !invertControls)
         {
             if (Input.GetKeyDown(KeyCode.W)) lastInput = Vector2.up;
             if (Input.GetKeyDown(KeyCode.A)) lastInput = Vector2.left;
             if (Input.GetKeyDown(KeyCode.S)) lastInput = Vector2.down;
             if (Input.GetKeyDown(KeyCode.D)) lastInput = Vector2.right;
+        }else if (!isDead && invertControls){
+            if (Input.GetKeyDown(KeyCode.W)) lastInput = Vector2.down;
+            if (Input.GetKeyDown(KeyCode.A)) lastInput = Vector2.right;
+            if (Input.GetKeyDown(KeyCode.S)) lastInput = Vector2.up;
+            if (Input.GetKeyDown(KeyCode.D)) lastInput = Vector2.left;
         }
     }
 

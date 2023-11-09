@@ -21,10 +21,10 @@ public class TeleporterScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Detected..");
+        //Debug.Log("Detected..");
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player detected..");
+            //Debug.Log("Player detected..");
 
             // Interrupt the lerp and teleport the player
             PacStudentController controller = other.GetComponent<PacStudentController>();

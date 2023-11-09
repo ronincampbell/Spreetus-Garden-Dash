@@ -15,20 +15,53 @@ public class HUDManager : MonoBehaviour
     private float timer = 0.0f;
     private int playerScore = 0;
     public bool gameStarted = false;
+    [Header("Warnings")]
+    public bool Level2;
+    public bool hungryActive;
+    public bool herbActive;
+    public bool laserActive;
+    public bool huntingActive;
+    public GameObject huntingWarning;
+    public GameObject herbWarning;
+    public GameObject laserWarning;
+    public GameObject hungryWarning;
+    private List<GameObject> activeWarnings;
+
     // Start is called before the first frame update
     void Start()
     {
         hungryUI = hud.transform.Find("GhostTimer").gameObject;
         hungryTimer = hungryUI.transform.Find("Time").GetComponent<TextMeshProUGUI>();
         lives = GameObject.FindGameObjectsWithTag("Lives");
+        activeWarnings = new List<GameObject>();
         StartCoroutine(startCountdown());
+        StartCoroutine(WarningManager());
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (Level2)
+        {
+            UpdateWarningList(hungryWarning, hungryActive);
+            UpdateWarningList(herbWarning, herbActive);
+            UpdateWarningList(laserWarning, laserActive);
+            UpdateWarningList(huntingWarning, huntingActive);
+        }
     }
+
+    void UpdateWarningList(GameObject warning, bool isActive)
+    {
+        if (isActive && !activeWarnings.Contains(warning))
+        {
+            activeWarnings.Add(warning);
+        }
+        else if (!isActive && activeWarnings.Contains(warning))
+        {
+            activeWarnings.Remove(warning);
+        }
+    }
+
 
     public void exitButton()
     {
@@ -38,6 +71,7 @@ public class HUDManager : MonoBehaviour
     private void ToggleHungryUI()
     {
         hungryUI.SetActive(!hungryUI.activeSelf);
+        hungryActive = !hungryActive;
     }
 
     public IEnumerator HungryTimer()
@@ -63,7 +97,7 @@ public class HUDManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Player is out of lives");
+            //Debug.Log("Player is out of lives");
             lives[0].SetActive(false);
             GameOver();
         }
@@ -138,5 +172,30 @@ public class HUDManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3.0f);
         SceneManager.LoadScene("StartScene");
+    }
+
+    private IEnumerator WarningManager()
+    {
+        while (true)
+        {
+            List<GameObject> cycleWarnings = new List<GameObject>(activeWarnings);
+            //Debug.Log("Active Warnings: " + activeWarnings.Count + " Cycle Warnings: " + cycleWarnings.Count);
+            if (cycleWarnings.Count > 1)
+            {
+                foreach (GameObject warning in cycleWarnings)
+                {
+                    warning.SetActive(true);
+                    yield return new WaitForSeconds(0.5f);
+                    warning.SetActive(false);
+                }
+            }
+            else if (cycleWarnings.Count == 1)
+            {
+                cycleWarnings[0].SetActive(true);
+                yield return new WaitForSeconds(0.5f);
+                cycleWarnings[0].SetActive(false);
+            }
+            yield return null;
+        }
     }
 }

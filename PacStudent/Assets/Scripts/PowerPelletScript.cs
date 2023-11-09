@@ -51,7 +51,7 @@ public class PowerPelletScript : MonoBehaviour
                 musicController.PlayHyperMusic();
             }
 
-            Debug.Log("Trigger activated..");
+            //Debug.Log("Trigger activated..");
             StartCoroutine(ScaredTimer());
         }
     }
@@ -78,7 +78,7 @@ public class PowerPelletScript : MonoBehaviour
                 controller.NormalState();
             }
         }
-        Debug.Log("Scared timer ended..");
+        //Debug.Log("Scared timer ended..");
         musicController.PlayNormalMusic();
     }
 
